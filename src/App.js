@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { getAuth } from "firebase/auth";
+import app from './firebase.init';
 
 function App() {
+
+  const auth = getAuth(app);
+
+const HandleEmailChange = () => {
+  console.log('something typed');
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  <h1> this is progamming </h1>
+
+
+ <form action="">
+<input onChange={HandleEmailChange} type="email" name="" id="" />
+<input type="password" name="" id="" />
+
+ </form>
+
+
+
     </div>
   );
 }
