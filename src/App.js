@@ -1,7 +1,7 @@
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import app from './firebase.init';
 import Form from 'react-bootstrap/Form'
 import { Button } from 'react-bootstrap';
@@ -12,6 +12,7 @@ function App() {
 
  
     const [error , setError]=useState('');
+    const [registered, setregistered] = useState(false);
   const [validated, setValidated] = useState(false);
   const [Email, setEmail]= useState('');
   const [passoword, setPassoword]= useState('');
@@ -24,6 +25,10 @@ const handleEmailBlur = event => {
 const handlePasswordBlur = event => {
   setPassoword(event.target.value);
 }
+const HandleRegisterchange = event => {
+  setregistered(event.target.checked);
+}
+
 const handleFormSubmit = event => {
   event.preventDefault();
 
@@ -41,21 +46,40 @@ const handleFormSubmit = event => {
 
 
  setError('');
+
+
+if(registered) {
+  signInWithEmailAndPassword(auth,Email,passoword)
+  .then(result => {
+    const user =result.user;
+    console.log(user);
+  });
+  setError(error.massage)
+
+}else{
   createUserWithEmailAndPassword(auth,Email,passoword)
   .then(result => {
     const user = result.user;
     console.log(user);
+    setEmail('');
+    setPassoword('');
   } )
   .catch(error => {
  console.log(error);
+ setError(error.message);
   })
 
+ 
+}
+
+
+event.preventDefault();
 
 }
 
   return (
     <div className="App">
-  <h1> this is progamming </h1>
+  <h1> Please {registered ? 'Login': 'Register'} </h1>
 
 <div className='w-50 mx-auto'>
   <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
@@ -77,11 +101,14 @@ const handleFormSubmit = event => {
             Please provide a valid city.
           </Form.Control.Feedback>
   </Form.Group>
+  <Form.Group className="mb-3" controlId="formBasicCheckbox">
+    <Form.Check onChange={HandleRegisterchange} type="checkbox" label="Already Registered?" />
+  </Form.Group>
 
   <p className='text-danger'>{error}</p>
 
   <Button  variant="primary" type="submit">
-    Submit
+   {registered ? 'Login': ' Register'}
   </Button>
 </Form>
 </div>
